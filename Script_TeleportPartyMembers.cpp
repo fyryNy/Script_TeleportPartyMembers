@@ -21,7 +21,7 @@ GEInt GE_STDCALL MagicTeleport(gCScriptProcessingUnit * a_pSPU, Entity * a_pSelf
 	Entity Player = Entity::GetPlayer();
 
 	//Get the player party list before executing original function
-	//NPCs that are tamed or under word of control spell leave the party after teleporting away from them, so we need to get the list before
+	//NPCs that are tamed or under influence of Word of dominance spell leave the party after teleporting away from them, so we need to get the list before
 	bTValArray<eCEntity*> PartyList = SelfEntity.Party.GetMembers(GEFalse);
 
 	//Little hack to prevent that annoying "NPC is waiting" message that shows up after teleporting away from NPC
@@ -47,7 +47,7 @@ GEInt GE_STDCALL MagicTeleport(gCScriptProcessingUnit * a_pSPU, Entity * a_pSelf
 			case gEPartyMemberType_Summoned:
 				break;
 			case gEPartyMemberType_Controlled:
-				//We do not want to teleport Human/Orc NPCs that are under Word of Control spell
+				//We do not want to teleport Human/Orc NPCs that are under influence of Word of dominance spell
 				if (PartyEntSpecies == gESpecies_Human || PartyEntSpecies == gESpecies_Orc)
 					continue;
 				break;
@@ -58,7 +58,7 @@ GEInt GE_STDCALL MagicTeleport(gCScriptProcessingUnit * a_pSPU, Entity * a_pSelf
 			//Teleport party member to player
 			PartyEnt.Teleport(SelfEntity);
 
-			//After teleporting NPCs that were tamed or under Word of Control spell return to their previous attitude and Summoned monsters become hostile
+			//After teleporting NPCs that were tamed or under influence of Word of dominance spell return to their previous attitude and Summoned monsters become hostile
 			//And Human/Orc NPCs that are in player party are put into waiting mode
 			//So here is a fix for that
 			PartyEnt.Party.SetPartyLeader(SelfEntity);
